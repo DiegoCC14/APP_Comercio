@@ -1,0 +1,8 @@
+Puede Ejecutar en la misma carpeta que Herramientas_QT.py un terminal
+1 - Abrir Terminal en la misma carpeta de Herramientas_QT.py
+2 - Ejecute Python -> Se abre el Python
+3 - importe "import Herramientas_QT " o "from Herramientas_QT import *"
+4 - Ejecute la funcion que requiera -> Centrar_Buttons_Cajas(par1,par2,par3,par4)
+
+
+    
