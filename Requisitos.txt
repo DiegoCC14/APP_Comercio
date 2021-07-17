@@ -14,6 +14,8 @@ Requisitos:
     -->>
 Git:
 
+- subir archivo :https://www.youtube.com/watch?v=jgeLj45G0tk
+
 - git clone [remote-name o url]	 #Clona el repositorio
 - git fetch [remote-name o url]	 #Trae los cambios del repositorio
 
@@ -22,3 +24,10 @@ Git:
 		- git add -u #Aniade todos los archivos modificados y new no eliminados	
 		- git add -A #Aniade todos los archivos modificados,new y eliminados
 
+- Aniadimos la direccion de git[remote]:
+	- git remote add Nombre_Direccion Direccion[https:sincomillas.com]
+
+-1 [ git add -A ]
+-2 [ git commit -m "Comentario" ]
+-3 [ git pull]
+-4 [ git push Nombre_Direccion rama[master] ]
