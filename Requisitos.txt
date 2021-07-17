@@ -12,3 +12,13 @@ Requisitos:
     - sudo apt-get install pyqt5-dev-tools
     - sudo apt-get install qttools5-dev-tools
     -->>
+Git:
+
+- git clone [remote-name o url]	 #Clona el repositorio
+- git fetch [remote-name o url]	 #Trae los cambios del repositorio
+
+- git add: [ https://github.com/git-guides/git-add ]
+		- git add [name_archivo.ext] #Aniade el archivo
+		- git add -u #Aniade todos los archivos modificados y new no eliminados	
+		- git add -A #Aniade todos los archivos modificados,new y eliminados
+
