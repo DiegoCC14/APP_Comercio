@@ -82,7 +82,3 @@ def Insert_SQL( sql , Nombre_Tabla , Diccionario_Campos ):
 	
 	cur.execute("INSERT INTO " + Nombre_Tabla + Campos_Tabla + " VALUES " + str( tuple(Diccionario_Campos.values()) )  ) 
 	sql.commit() #Guardamos los cambios
-
-SQL = Abrir_Conexion()
-print( Ver_Nombres_Campos_Tabla( SQL , 'Productos' ) )
-Cerrar_Conexion( SQL )
