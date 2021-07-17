@@ -13,7 +13,6 @@ def Abrir_Conexion():
 	#mysql -h brzq0rsktp2der07uwg0-mysql.services.clever-cloud.com -P 3306 -u uney766i2wqkm0an -p brzq0rsktp2der07uwg0
 	#Password: pHCSKl7UIq57Di9Qurc1
 	'''
-
 	return mysql.connector.connect(
 		host="brzq0rsktp2der07uwg0-mysql.services.clever-cloud.com",
 		password="pHCSKl7UIq57Di9Qurc1",
@@ -25,52 +24,50 @@ def Abrir_Conexion():
 def Cerrar_Conexion( sql ):
 	sql.close()
 
-def Decodificar_UTF8(Cadena_Byte):
-	# Parece que llegan bytes de la DB remota 
-	# decodificamos los datos.
-	# cuando la DB se encuentra en la misma PC no hace falta decodificar
-	return( Cadena_Byte.decode("utf-8") )
-	
-def Decodificar_Arreglo(Arreglo_Bynario):
-	Arreglo_Decodificado = []
-	#print( type( Arreglo_Bynario[0][0] ) )
-	for elemento_array in Arreglo_Bynario:
-		print( 'Array: ',elemento_array )
-		for elemento in elemento_array:
-			print( 'Sub array: ',elemento )
-			Arreglo_Decodificado.append( Decodificar_UTF8(elemento) )
-	return Arreglo_Decodificado
-
 def Ver_Tablas_de_DB( sql ):
 	# sql: mysql.cursor -> Siendo mysql la conexion con DB [primero>Abrir_Conexion()]
-	# -->> Retorna una lista con todas las tablas de DB
+	# -->> Retorna un lista con el nombre de todas las tablas de DB
 	cur = sql.cursor()
 	cur.execute("SHOW TABLES;")
-	return Decodificar_Arreglo( cur.fetchall() )
-	#return( cur.fetchone()[0].decode("utf-8") ) 
+	
+	Tablas = []
+	for campo in cur.fetchall():
+		Tablas.append(campo[0])
+	return Tablas 
 
 def Ver_Tabla( sql , Nombre_Tabla ):
 	# sql: mysql.cursor -> Siendo mysql la conexion con DB [primero>Abrir_Conexion()]
 	# Nombre_Tabla: Nombre de la Tabla a ver
 	# -->> Retorna una tupla con todas las filas de DB
-	cur = sql.cursor()
-	try:
-		cur.execute("SELECT * FROM " + Nombre_Tabla)
-		return( list( cur.fetchall() ) ) #Retorna una lista con todas las filas de DB
-	except:
-		print("<<<----- SIN ACCESO A TABLA: " + Nombre_Tabla + "  [error]->[func: Ver_Tabla()] ----->>>")
 
-def Ver_Campos_Tabla( sql , Nombre_Tabla ):
+	cur = sql.cursor()
+	Nombres_Campos_Tabla = Ver_Nombres_Campos_Tabla( sql , Nombre_Tabla )
+
+	cur.execute("SELECT * FROM " + Nombre_Tabla)
+	Tabla = []
+	for fila in cur.fetchall():
+		Diccionario = {}
+		for x in range( len( Nombres_Campos_Tabla ) ):
+			Diccionario[ Nombres_Campos_Tabla[x] ] = fila[x]  
+		Tabla.append( Diccionario )
+	return( Tabla ) #Retorna una lista con todas las filas de DB
+
+def Ver_Campos_y_Atributos_Tabla( sql , Nombre_Tabla ):
 	# Retorna los campos de la Tabla
 	# sql: mysql.cursor -> Siendo mysql la conexion con DB [primero>Abrir_Conexion()]
 	# Nombre_Tabla: Nombre de la Tabla a ver DESCRIPCION
-	# -->> Retorna una tupla con todas las filas de DB
+	# -->> Retorna una lista con todas las filas de DB
 	cur = sql.cursor()
-	try:
-		cur.execute("DESCRIBE " + Nombre_Tabla)
-		return( list( cur.fetchall() )) #Retorna una lista con todos los Campos de DB
-	except:
-		print("<<<----- SIN ACCESO A TABLA: " + Nombre_Tabla + "  [error]->[func: Ver_Campos_Tabla()] ----->>>")
+	cur.execute("DESCRIBE " + Nombre_Tabla)
+	return( cur.fetchall() ) #Retorna una lista con todos los Campos de DB
+
+def Ver_Nombres_Campos_Tabla( sql , Nombre_Tabla ):
+	#Retorna lista con los nombres de los campos de la Tabla 'Nombre_Tabla'
+	Campos_Tabla = Ver_Campos_y_Atributos_Tabla( sql , Nombre_Tabla )
+	Nombres_Campo_Tabla = []
+	for campo in Campos_Tabla:
+		Nombres_Campo_Tabla.append( campo[0] )
+	return Nombres_Campo_Tabla
 
 def Insert_SQL( sql , Nombre_Tabla , Diccionario_Campos ):
 	#sql: objeto con conexion establecida en DB
@@ -82,17 +79,10 @@ def Insert_SQL( sql , Nombre_Tabla , Diccionario_Campos ):
 	for Campo in Diccionario_Campos.keys():
 		Campos_Tabla += Campo + ','
 	Campos_Tabla = Campos_Tabla[0:len(Campos_Tabla)-1] + ')'
-
-	cur.execute("INSERT INTO " + Nombre_Tabla + tupla( Diccionario_Campos.keys() + " VALUES " + Diccionario_Campos.values() ) ) 
-	cur.commit() #Guardamos los cambios
+	
+	cur.execute("INSERT INTO " + Nombre_Tabla + Campos_Tabla + " VALUES " + str( tuple(Diccionario_Campos.values()) )  ) 
+	sql.commit() #Guardamos los cambios
 
 SQL = Abrir_Conexion()
-#print( Ver_Campos_Tabla( SQL,"Productos" ) )
-print( Ver_Tablas_de_DB( SQL ) )
+print( Ver_Nombres_Campos_Tabla( SQL , 'Productos' ) )
 Cerrar_Conexion( SQL )
-
-Campos = {'Nombre_Producto':'Gaseosa',
-		'Precio':125.50,
-		'Precio Publico':200}
-
-#Insert_SQL( 'algo' , 'Productos' , Campos )
