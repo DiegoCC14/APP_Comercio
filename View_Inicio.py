@@ -8,7 +8,7 @@ class Inicio_App( QDialog ): #Reemplazo de 'QMainWindow' por 'QDialog' no se la 
 
 	def __init__(self):
 		super().__init__()
-		uic.loadUi( 'Interfaz_Prueba.ui' , self )
+		uic.loadUi( 'Interfaz_Inicio.ui' , self )
 
 		self.Boton_Registrar_Producto.clicked.connect( self.Abrir_Ventana_Registro_Producto )
 
