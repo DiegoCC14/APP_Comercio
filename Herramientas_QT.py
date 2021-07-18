@@ -27,6 +27,4 @@ def Centrar_Buttons_Cajas( Tam_Ventana , Tam_Ventana_Reducida , Tam_Buttons , Ca
 	#Error en Tam Ventanas o Buttons
 	print("<<<---- Tamanio de Ventanas o Botton no Posible ---->>> [error func: Centrar_Buttons]")	
 
-	
-
-print( Centrar_Buttons_Cajas( 200, 100 , 30 , 1 ) )
+print( Centrar_Buttons_Cajas( 550, 550 , 261 , 1 ) )
